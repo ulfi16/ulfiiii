@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Intervention\Image\Facades\Image as Image;
-
+use Image;
+use App\Models\galeriImage;
 class ImageController extends Controller
 {
     public function storeImage(Request $request)
@@ -21,10 +21,10 @@ class ImageController extends Controller
             
          $file=$request->file('image');
 
-         $image_name=rand(1000,9999).time().','.$file->getClientOriginalExtension();
+         $image_name=rand(1000,9999).time().'.'.$file->getClientOriginalExtension();
          $thumbPath=public_path('user_images/thumb');
          $resize_image=Image::make($file->getRealPath());
-         $resize_image=resize(300,200,function($c){
+         $resize_image->resize(300,200,function($c){
            
          })->save($thumbPath.'/'.$image_name);
 
@@ -33,7 +33,13 @@ class ImageController extends Controller
 
         }
 
-
+        galeriImage::create([
+            'user_id'=>auth()->id(),
+            'caption'=>$request->caption,
+            'category'=>$request->category,
+            'image'=>$image_name
+        ]);
         
+        return redirect()->back()->with('success','Image successfully uploaded.');
     }
 }

@@ -52,7 +52,7 @@
 
                           <div id="demo" class="collapse">
 
-                              <form action="{{route('image-store')}}" method="POST" id="image_upload_form" enctype="multipart/form-data">@csrf
+                              <form action="{{route('image-store')}}" method="POST" id="123image_upload_form" enctype="multipart/form-data">@csrf
                                   <div class="form-group">
                                     <label for="caption">Keterangan Foto</label>
                                     <input type="text" name="caption" class="form-control" placeholder="Masukkan Keterangan" id="caption">
@@ -101,24 +101,29 @@
 
                         <div class="col-md-12 mt-4">
                             <div class="row">
-                                <div class="col-md-3 mb-4">
-                                    <a href="#">
-                                        <img src="https://placehold.jp/3d4070/ffffff/150x150.png?css=%7B%22border-radius%22%3A%2215px%22%7D" height="100%" width="100%">
-                                    </a>
-                                </div>
-                                <div class="col-md-3 mb-4">
-                                    <a href="#">
-                                        <img src="https://placehold.jp/3d4070/ffffff/150x150.png?css=%7B%22border-radius%22%3A%2215px%22%7D" height="100%" width="100%">
-                                    </a>
-                                </div>                                <div class="col-md-3 mb-4">
-                                    <a href="#">
-                                        <img src="https://placehold.jp/3d4070/ffffff/150x150.png?css=%7B%22border-radius%22%3A%2215px%22%7D" height="100%" width="100%">
-                                    </a>
-                                </div>                                <div class="col-md-3 mb-4">
-                                    <a href="#">
-                                        <img src="https://placehold.jp/3d4070/ffffff/150x150.png?css=%7B%22border-radius%22%3A%2215px%22%7D" height="100%" width="100%">
-                                    </a>
-                                </div>
+
+                              @if(count($images))
+
+                                 @foreach($images as $image)
+                                 <div class="col-md-3 mb-4">
+                                  <a href="#">
+                                      <img src="{{asset('user_images/thumb/'.$image->image)}}" height="100%" width="100%">
+                                  </a>
+                              </div>
+                                 @endforeach
+
+                              @else
+                              <div class="col-md-12">
+                                <p>No Image Found</p>
+                              </div>
+                              @endif
+
+                              @if(count($images))
+                              <div class="col-md-12">
+                                {{$images->links()}}
+                              </div>
+                              @endif
+
                             </div>
                         </div>
                     </div>
