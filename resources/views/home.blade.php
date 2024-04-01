@@ -11,9 +11,10 @@
                         <div>
 
                             <form class="form-inline">
-                                <select class="form-control">
-                                    <option>Tertua</option>
-                                    <option>Terbaru</option>
+                                <select class="form-control" onchange="sort_by(this.value)">
+                                    <option value="terbaru" {{(Request::query('sort_by') && Request::query('sort_by')=='terbaru' || !Request::query('sort_by') ) ?'selected':''}}>Terbaru</option>
+                                    <option value="terlama" {{(Request::query('sort_by') && Request::query('sort_by')=='terlama' || !Request::query('sort_by') ) ?'selected':''}}>Terlama</option>
+                                    
                                 </select>
                             </form>
                         </div>
@@ -29,10 +30,12 @@
 
                     <div class="row">
                         <div class="col-md-3">
+                          <p>Menyaring Berdasarkan Kategori</p>
                           <div class="list-group">
-                              <a href="#" class="list-group-item list-group-item-action">Pribadi</a>
-                              <a href="#" class="list-group-item list-group-item-action">Teman</a>
-                              <a href="#" class="list-group-item list-group-item-action">Keluarga</a>
+                          <a href="javascript:filter_image('')" class="list-group-item list-group-item-action {{(!Request::query('category'))?'active':''}}">Semua</a>
+                              <a href="javascript:filter_image('pribadi')" class="list-group-item list-group-item-action {{(Request::query('category')=='pribadi')?'active':''}}">Pribadi</a>
+                              <a href="javascript:filter_image('teman')" class="list-group-item list-group-item-action {{(Request::query('category')=='teman')?'active':''}}">Teman</a>
+                              <a href="javascript:filter_image('keluarga')" class="list-group-item list-group-item-action {{(Request::query('category')=='keluarga')?'active':''}}">Keluarga</a>
                           </div>
                         </div>
                         <div class="col-md-9">
@@ -114,13 +117,13 @@
 
                               @else
                               <div class="col-md-12">
-                                <p>No Image Found</p>
+                                <p>Tidak Ditemukan Foto</p>
                               </div>
                               @endif
 
                               @if(count($images))
                               <div class="col-md-12">
-                                {{$images->links()}}
+                                {{$images->appends(Request::query())->links()}}
                               </div>
                               @endif
 
@@ -141,6 +144,27 @@
 
 @section('js')
 <script type="text/javascript">
+
+var query={};
+
+@if(Request::query('category'))
+Object.assign(query,{'category':"{{Request::query('category')}}"});
+@endif
+
+@if(Request::query('sort_by'))
+Object.assign(query,{'sort_by':"{{Request::query('sort_by')}}"});
+@endif
+
+function filter_image(value){
+  Object.assign(query,{'category':value});
+  window.location.href="{{route('home')}}"+'?'+$.param(query);
+}
+
+function sort_by(value){
+  Object.assign(query,{'sort_by':value});
+  window.location.href="{{route('home')}}"+'?'+$.param(query);
+}
+
 
 
 $("#image_upload_form").validate({
