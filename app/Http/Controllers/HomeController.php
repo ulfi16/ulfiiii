@@ -34,7 +34,7 @@ class HomeController extends Controller
         }else{
             $query->orderBy('created_at','DESC');
         }
-        $data['images']=$query->paginate(2);
+        $data['images']=$query->paginate(3);
         return view('home',$data);
     }
 }

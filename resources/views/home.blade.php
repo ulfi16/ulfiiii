@@ -11,6 +11,7 @@
                         <div>
 
                             <form class="form-inline">
+                              <label>Sortir dengan &nbsp;</label>
                                 <select class="form-control" onchange="sort_by(this.value)">
                                     <option value="terbaru" {{(Request::query('sort_by') && Request::query('sort_by')=='terbaru' || !Request::query('sort_by') ) ?'selected':''}}>Terbaru</option>
                                     <option value="terlama" {{(Request::query('sort_by') && Request::query('sort_by')=='terlama' || !Request::query('sort_by') ) ?'selected':''}}>Terlama</option>
@@ -109,7 +110,7 @@
 
                                  @foreach($images as $image)
                                  <div class="col-md-3 mb-4">
-                                  <a href="#">
+                                  <a href="{{asset('user_images/'.$image->image)}}" class="fancybox" data-caption="{{$image->caption}}" data-id="{{$image->id}}" data-fancybox="{{$image->category}}">
                                       <img src="{{asset('user_images/thumb/'.$image->image)}}" height="100%" width="100%">
                                   </a>
                               </div>
@@ -138,6 +139,13 @@
         </div>
     </div>
 </div>
+
+<form id="image-delete-form" action="" method="post">
+  @csrf
+  @method('DELETE');
+</form>
+
+
 @endsection
 
 
@@ -165,7 +173,41 @@ function sort_by(value){
   window.location.href="{{route('home')}}"+'?'+$.param(query);
 }
 
+$.fancybox.defaults.btnTpl.delete="<button class='fancybox-button fancybox-delete-button'>Delete</button>";
+$.fancybox.defaults.buttons=['delete','close','share','download'];
 
+var current_image_id='';
+
+$('.fancybox').attr('rel','galeri').fancybox({
+  beforeShow:function(instant,item){
+    current_image_id=this.opts.id;
+  }
+
+
+});
+
+$('body').on('click', 'button.fancybox-delete-button',function(e){
+
+  swal({
+  title: "Are you sure?",
+  text: "Anda ingin menghapus gambar ini!?",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    var base_url="{{URL::to('/')}}";
+
+    $('#image-delete-form').attr('action',base_url+'/image-delete/'+current_image_id);
+    $('#image-delete-form').submit();
+
+  } else {
+    swal("File gambar Anda aman!");
+  }
+});
+
+});
 
 $("#image_upload_form").validate({
   rules: {

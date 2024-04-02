@@ -42,4 +42,26 @@ class ImageController extends Controller
         
         return redirect()->back()->with('success','Image successfully uploaded.');
     }
+
+    public function deleteImage($id){
+
+        $image=galeriImage::findOrFail($id);
+        if ($image->user_id!=auth()->id()) {
+            abort(403);
+        }
+
+        $file_path=public_path('/user_images/'.$image->image);
+        if(\File::exists($file_path)){
+            \File::delete($file_path);
+        }
+
+        $file_thumb_path=public_path('/user_images/thumb/'.$image->image);
+        if(\File::exists($file_thumb_path)){
+            \File::delete($file_thumb_path);
+        }
+
+        $image->delete();
+
+        return redirect()->back()->with('success','Image deleted successfully.');
+    }
 }

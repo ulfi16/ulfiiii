@@ -2,6 +2,15 @@ label.error{
     color: red;
 }
   
+.fancybox-delete-button{
+  background: red!important;
+  padding: 8px 60px 12px 10px!important;
+}
+
+.swal-overlay{
+  z-index: 99999!important;
+}
+
   .box {
     position: relative;
     background: #ffffff;
