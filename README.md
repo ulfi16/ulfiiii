@@ -1,5 +1,5 @@
 <p>Tools Yang Digunakan</p>
-<p>Laravel , Xampp, Php, Composer, Git bash, Diagram draw.io </p>
+<p>Laravel , Xampp 8.2.12, Composer 2.7.3, Git bash 2.44.0 windows.1, Diagram draw.io 24.2.8</p>
 
 ![alt text](https://github.com/ulfi16/ulfiiii/blob/main/public/Screenshot%20(12).png?raw=true)
 
